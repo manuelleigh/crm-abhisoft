@@ -2,7 +2,7 @@
   ?>
 <?php
 include_once "funciones.php";
-$ok = agregarVenta($_POST["id_cliente"], $_POST["monto"], $_POST["fecha"]);
+$ok = agregarVenta($_POST["id_cliente"], $_POST["id_servicio"], $_POST["monto"], $_POST["fecha"]);
 if ($ok) {
     header("Location: ventas.php");
 } else {

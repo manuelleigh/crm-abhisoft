@@ -13,9 +13,9 @@ $clientesPorEdad = obtenerReporteClientesEdades();
 $ventasAnioActual = obtenerVentasAnioActualOrganizadasPorMes();
 ?>
 
-<div class="row">
-    <div class="col-12 text-center">
-        <h1>Dashboard general</h1>
+<div class="row pl-4 pr-4">
+    <div class="col-12 text-center pt-4 pb-4">
+        <h1>Dashboard General</h1>
     </div>
     <div class="col-3">
         <div class="card">

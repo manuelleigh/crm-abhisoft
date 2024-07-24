@@ -9,7 +9,7 @@ if (!isset($_GET["busqueda"]) || empty($_GET["busqueda"])) {
     $clientes = buscarClientes($_GET["busqueda"]);
 }
 ?>
-<div class="row">
+<div class="row p-4">
     <div class="col-12">
         <h1>Clientes</h1>
         <a href="formulario_agregar_cliente.php" class="btn btn-success mb-2">Agregar</a>
@@ -27,9 +27,11 @@ if (!isset($_GET["busqueda"]) || empty($_GET["busqueda"])) {
             <thead>
 
                 <tr>
+                    <th>DNI</th>
                     <th>Nombre</th>
                     <th>Departamento</th>
                     <th>Edad</th>
+                    <th>Correo</th>
                     <th>Fecha de registro</th>
                     <th>Dashboard</th>
                     <th>Editar</th>
@@ -39,9 +41,11 @@ if (!isset($_GET["busqueda"]) || empty($_GET["busqueda"])) {
             <tbody>
                 <?php foreach ($clientes as $cliente) { ?>
                     <tr>
+                        <td><?php echo $cliente->dni ?></td>
                         <td><?php echo $cliente->nombre ?></td>
                         <td><?php echo $cliente->departamento ?></td>
                         <td><?php echo $cliente->edad ?></td>
+                        <td><?php echo $cliente->correo ?></td>
                         <td><?php echo $cliente->fecha_registro ?></td>
                         <td>
                             <a class="btn btn-info" href="dashboard_cliente.php?id=<?php echo $cliente->id ?>">Dashboard</a>

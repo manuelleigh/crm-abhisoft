@@ -11,6 +11,8 @@ function obtenerDepartamentos()
         "Lima",
         "Chiclayo",
         "Trujillo",
+        "Tumbes",
+        "Arequipa",
     ];
 }
 function obtenerBD()
@@ -26,25 +28,39 @@ function obtenerBD()
     return $database;
 }
 
-function agregarCliente($nombre, $edad, $departamento)
+function agregarCliente($nombre, $edad, $departamento, $dni, $correo)
 {
     $bd = obtenerBD();
     $fechaRegistro = date("Y-m-d");
-    $sentencia = $bd->prepare("INSERT INTO clientes(nombre, edad, departamento, fecha_registro) VALUES (?, ?, ? ,?)");
-    return $sentencia->execute([$nombre, $edad, $departamento, $fechaRegistro]);
+    $sentencia = $bd->prepare("INSERT INTO clientes(nombre, edad, departamento, fecha_registro, dni, correo) VALUES (?, ?, ? ,?, ?, ?)");
+    return $sentencia->execute([$nombre, $edad, $departamento, $fechaRegistro, $dni, $correo]);
+}
+
+function agregarServicio($descripcion, $precio)
+{
+    $bd = obtenerBD();
+    $sentencia = $bd->prepare("INSERT INTO servicios(descripcion, precio) VALUES (?, ?)");
+    return $sentencia->execute([$descripcion, $precio]);
 }
 
 function obtenerClientes()
 {
     $bd = obtenerBD();
-    $sentencia = $bd->query("SELECT id, nombre, edad, departamento, fecha_registro FROM clientes");
+    $sentencia = $bd->query("SELECT id, nombre, edad, departamento, fecha_registro, dni, correo FROM clientes");
+    return $sentencia->fetchAll();
+}
+
+function obtenerServicios()
+{
+    $bd = obtenerBD();
+    $sentencia = $bd->query("SELECT id, descripcion, precio FROM servicios");
     return $sentencia->fetchAll();
 }
 
 function buscarClientes($nombre)
 {
     $bd = obtenerBD();
-    $sentencia = $bd->prepare("SELECT id, nombre, edad, departamento, fecha_registro FROM clientes WHERE nombre LIKE ?");
+    $sentencia = $bd->prepare("SELECT id, nombre, edad, departamento, fecha_registro, dni, correo FROM clientes WHERE nombre LIKE ?");
     $sentencia->execute(["%$nombre%"]);
     return $sentencia->fetchAll();
 }
@@ -56,26 +72,62 @@ function eliminarCliente($id)
     $sentencia = $bd->prepare("DELETE FROM clientes WHERE id = ?");
     return $sentencia->execute([$id]);
 }
+function eliminarServicio($id)
+{
+    $bd = obtenerBD();
+    $sentencia = $bd->prepare("DELETE FROM servicios WHERE id = ?");
+    return $sentencia->execute([$id]);
+}
 
 function obtenerClientePorId($id)
 {
     $bd = obtenerBD();
-    $sentencia = $bd->prepare("SELECT id, nombre, edad, departamento, fecha_registro FROM clientes WHERE id = ?");
+    $sentencia = $bd->prepare("SELECT id, nombre, edad, departamento, fecha_registro, dni, correo, idservicio FROM clientes WHERE id = ?");
     $sentencia->execute([$id]);
     return $sentencia->fetchObject();
 }
-function actualizarCliente($nombre, $edad, $departamento, $id)
+function obtenerServicioPorId($id)
 {
     $bd = obtenerBD();
-    $sentencia = $bd->prepare("UPDATE clientes SET nombre = ?, edad = ?, departamento = ? WHERE id = ?");
-    return $sentencia->execute([$nombre, $edad, $departamento, $id]);
+    $sentencia = $bd->prepare("SELECT id, descripcion, precio FROM servicios WHERE id = ?");
+    $sentencia->execute([$id]);
+    return $sentencia->fetchObject();
+}
+function actualizarCliente($nombre, $edad, $departamento, $dni, $correo, $id)
+{
+    $bd = obtenerBD();
+    $sentencia = $bd->prepare("UPDATE clientes SET nombre = ?, edad = ?, departamento = ?, dni = ?, correo = ? WHERE id = ?");
+    return $sentencia->execute([$nombre, $edad, $departamento, $dni, $correo, $id]);
+}
+function actualizarServicio($descripcion, $precio, $id)
+{
+    $bd = obtenerBD();
+    $sentencia = $bd->prepare("UPDATE servicios SET descripcion = ?, precio = ? WHERE id = ?");
+    return $sentencia->execute([$descripcion, $precio, $id]);
 }
 
-function agregarVenta($idCliente, $monto, $fecha)
+function agregarVenta($idCliente, $id_servicio, $monto, $fecha)
 {
     $bd = obtenerBD();
-    $sentencia = $bd->prepare("INSERT INTO ventas_clientes(id_cliente, monto, fecha) VALUES (?, ?, ?)");
-    return $sentencia->execute([$idCliente, $monto, $fecha]);
+    try {
+        $bd->beginTransaction();
+
+        $sentencia = $bd->prepare("INSERT INTO ventas_clientes(id_cliente, monto, fecha) VALUES (?, ?, ?)");
+        $resultado1 = $sentencia->execute([$idCliente, $monto, $fecha]);
+        $sentencia2 = $bd->prepare("UPDATE clientes SET idservicio = ? WHERE id = ?");
+        $resultado2 = $sentencia2->execute([$id_servicio, $idCliente]);
+
+        if ($resultado1 && $resultado2) {
+            $bd->commit();
+            return true;
+        } else {
+            $bd->rollBack();
+            return false;
+        }
+    } catch (Exception $e) {
+        $bd->rollBack();
+        throw $e;
+    }
 }
 
 function totalAcumuladoVentasPorCliente($idCliente)

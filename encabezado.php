@@ -16,15 +16,15 @@
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css" rel="stylesheet">
     <style>
     .nav-link{
-        font-size: 1.2rem;
+        font-size: 1.3rem;
     }
     </style>
 </head>
 
 <body>
     <!-- Definición del menú -->
-    <nav class="navbar navbar-expand-md navbar-dark bg-success fixed-top">
-        <a class="navbar-brand" href="">CRM</a>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href=""><img src="img/logo.png" width="150px"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#miNavbar" aria-controls="miNavbar" aria-expanded="false" aria-label="Mostrar u ocultar menú">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -38,7 +38,10 @@
                     <a class="nav-link" href="ventas.php"><span class="mdi mdi-store"></span> Ventas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php"><span class="mdi mdi-desktop-mac-dashboard"></span> Dashboard</a>
+                    <a class="nav-link" href="servicios.php"><span class="mdi mdi-table"></span> Servicios</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.php"><span class="mdi mdi-desktop-mac-dashboard"></span> Panel</a>
                 </li>
             </ul>
         </div>

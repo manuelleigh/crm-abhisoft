@@ -12,12 +12,20 @@ $departamentos = obtenerDepartamentos();
         <form action="actualizar_cliente.php" method="post">
             <input type="hidden" name="id" value="<?php echo $cliente->id ?>">
             <div class="form-group">
+                <label for="dni">DNI</label>
+                <input value="<?php echo $cliente->dni ?>" required type="text" class="form-control" name="dni" id="dni" placeholder="DNI">
+            </div>
+            <div class="form-group">
                 <label for="nombre">Nombre</label>
                 <input value="<?php echo $cliente->nombre ?>" required type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre">
             </div>
             <div class="form-group">
                 <label for="edad">Edad</label>
                 <input value="<?php echo $cliente->edad ?>" required type="number" class="form-control" name="edad" id="edad" placeholder="Edad">
+            </div>
+            <div class="form-group">
+                <label for="dni">Correo</label>
+                <input value="<?php echo $cliente->correo ?>" required type="text" class="form-control" name="correo" id="correo" placeholder="Correo">
             </div>
             <div class="form-group">
                 <label for="departamento">Departamento</label>

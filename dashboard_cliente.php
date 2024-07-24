@@ -10,9 +10,15 @@ $totalVentasUltimoAnio = totalAcumuladoVentasPorClienteEnUltimoAnio($cliente->id
 $totalVentasEnOtroPeriodo = totalAcumuladoVentasPorClienteAntesDeUltimoAnio($cliente->id);
 ?>
 
-<div class="row">
+<div class="row p-4">
     <div class="col-12">
         <h1>Dashboard de <?php echo $cliente->nombre ?></h1>
+        <?php
+        if($cliente->idservicio != 0){
+            $servicio = obtenerServicioPorId($cliente->idservicio);
+            echo "<h3><center>Servicio Contratado: $servicio->descripcion</center></h3>";
+        }
+        ?>
         <a href="clientes.php" class="btn btn-info mb-2">Volver</a>
     </div>
     <div class="col-4">
